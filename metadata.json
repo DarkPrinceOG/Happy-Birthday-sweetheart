@@ -1,0 +1,6 @@
+{
+  "name": "A Letter for Ananya",
+  "description": "A personal, password-protected digital birthday letter and rose for Ananya.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
