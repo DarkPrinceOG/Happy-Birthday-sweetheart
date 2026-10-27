@@ -3,6 +3,7 @@ import { PasswordGate } from './components/PasswordGate.tsx';
 import { EnvelopeScene } from './components/EnvelopeScene.tsx';
 import { LetterReader } from './components/LetterReader.tsx';
 import { RoseScene } from './components/RoseScene.tsx';
+import { BackgroundMusic } from './components/BackgroundMusic.tsx';
 import type { ExperienceStage, LetterPayload } from './types.ts';
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
   const [letterData, setLetterData] = useState<LetterPayload | null>(null);
   const [isFadingOutLetter, setIsFadingOutLetter] = useState(false);
   const [isFetchingLetter, setIsFetchingLetter] = useState(false);
+  const [musicStarted, setMusicStarted] = useState(false);
 
   // Restore existing session token if still valid
   useEffect(() => {
@@ -41,6 +43,7 @@ export default function App() {
       if (data.success && data.letter) {
         setLetterData(data.letter);
         setAuthToken(token);
+        setMusicStarted(true);
         sessionStorage.setItem('letter_auth_token', token);
         if (advanceToEnvelope) {
           setStage('envelope');
@@ -57,6 +60,7 @@ export default function App() {
   };
 
   const handleGateSuccess = (token: string) => {
+    setMusicStarted(true);
     loadLetterContent(token, true);
   };
 
@@ -74,6 +78,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full bg-[#FAF7F2] font-ui transition-colors duration-1000">
+      {/* Background ambient music (loops at 50% volume after password unlock) */}
+      <BackgroundMusic
+        shouldPlay={musicStarted}
+        isDarkScene={stage === 'rose'}
+      />
+
       {/* Stage 1: Password Gate */}
       {stage === 'gate' && (
         <PasswordGate onSuccess={handleGateSuccess} />

@@ -230,6 +230,9 @@ app.get('/api/health', (_req, res) => {
 async function startServer() {
   const isProd = process.env.NODE_ENV === 'production';
 
+  // Explicitly serve static public assets (including audio)
+  app.use('/assets', express.static(path.resolve(__dirname, 'public/assets')));
+
   if (!isProd) {
     // Dynamic import vite dev server middlewares
     const { createServer: createViteServer } = await import('vite');
